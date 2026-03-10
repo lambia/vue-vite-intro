@@ -1,6 +1,7 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 import TodoList from './components/TodoList.vue'
+import AppSearch from './components/AppSearch.vue';
 
 // const axios = require('axios').default; //CJS
 import axios from "axios"; //MJS/ESM
@@ -10,14 +11,29 @@ export default {
 	data() {
 		return {
 			apiUrl: "https://jsonplaceholder.typicode.com/todos",
-			todoList: []
+			todoList: [],
+			filteredTodoList: []
 		}
 	},
 	components: {
 		// HelloWorld
-		TodoList
+		TodoList,
+		AppSearch
 	},
 	methods: {
+		gestisciRicerca(searchString) {
+			console.log("Il padre ha rilevato ricerca dal figlio:", searchString);
+
+			const condizione = !searchString || searchString.trim() == "";
+
+			if (condizione) {
+				this.filteredTodoList = this.todoList;
+			} else {
+				this.filteredTodoList = this.todoList.filter(elemento => elemento.title.includes(searchString));
+			}
+
+			// this.filteredTodoList = condizione ? this.todoList : this.todoList.filter(x => x.title.includes(searchString));
+		}
 	},
 	mounted() {
 		// console.log("Componente app montato");
@@ -25,6 +41,7 @@ export default {
 		axios.get(this.apiUrl).then(result => {
 			// console.log("Dati ricevuti!");
 			this.todoList = result.data;
+			this.filteredTodoList = result.data;
 		});
 	}
 }
@@ -35,7 +52,9 @@ export default {
 
 	<!-- <p>{{ numero }}</p> -->
 	<!-- <HelloWorld msg="Messaggio dal padre" /> -->
-	<TodoList :list="todoList" />
+	<AppSearch @search="gestisciRicerca" />
+
+	<TodoList :list="filteredTodoList" />
 </template>
 
 <style scoped></style>
