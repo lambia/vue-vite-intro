@@ -29,8 +29,13 @@ export default {
 <template>
 	<h2>ToDo List:</h2>
 	<ul>
-		<li v-for="elemento in computedList">{{ elemento.title }}</li>
+		<li v-for="elemento in computedList" :class="{ completed: elemento.completed }">{{ elemento.title }}</li>
 	</ul>
 </template>
 
-<style scoped></style>
+<style scoped>
+.completed {
+	text-decoration: line-through;
+	opacity: 0.7;
+}
+</style>
