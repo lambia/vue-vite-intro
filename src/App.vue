@@ -12,7 +12,7 @@ export default {
 		return {
 			apiUrl: "https://jsonplaceholder.typicode.com/todos",
 			todoList: [],
-			filteredTodoList: []
+			searchString: "",
 		}
 	},
 	components: {
@@ -23,16 +23,17 @@ export default {
 	methods: {
 		gestisciRicerca(searchString) {
 			console.log("Il padre ha rilevato ricerca dal figlio:", searchString);
+			this.searchString = searchString;
+		}
+	},
+	computed: {
+		filteredTodoList() {
 
-			const condizione = !searchString || searchString.trim() == "";
-
-			if (condizione) {
-				this.filteredTodoList = this.todoList;
-			} else {
-				this.filteredTodoList = this.todoList.filter(elemento => elemento.title.includes(searchString));
+			if (!this.searchString || this.searchString.trim() == "") {
+				return this.todoList;
 			}
 
-			// this.filteredTodoList = condizione ? this.todoList : this.todoList.filter(x => x.title.includes(searchString));
+			return this.todoList.filter(elemento => elemento.title.includes(this.searchString));
 		}
 	},
 	mounted() {
@@ -41,7 +42,6 @@ export default {
 		axios.get(this.apiUrl).then(result => {
 			// console.log("Dati ricevuti!");
 			this.todoList = result.data;
-			this.filteredTodoList = result.data;
 		});
 	}
 }
