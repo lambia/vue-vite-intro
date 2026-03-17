@@ -2,15 +2,12 @@
 // import HelloWorld from './components/HelloWorld.vue'
 import TodoList from './components/TodoList.vue'
 import AppSearch from './components/AppSearch.vue';
-
-// const axios = require('axios').default; //CJS
-import axios from "axios"; //MJS/ESM
+import todoSrv from "./services/ToDo"
 
 export default {
 	name: "App",
 	data() {
 		return {
-			apiUrl: "https://jsonplaceholder.typicode.com/todos",
 			todoList: [],
 			searchString: "",
 		}
@@ -39,9 +36,11 @@ export default {
 	mounted() {
 		// console.log("Componente app montato");
 
-		axios.get(this.apiUrl).then(result => {
+		todoSrv.index().then(result => {
 			// console.log("Dati ricevuti!");
 			this.todoList = result.data;
+		}).catch(error => {
+			console.error("Ops... qualcosa è andato storto!");
 		});
 	}
 }
