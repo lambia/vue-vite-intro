@@ -9,6 +9,10 @@ const service = {
 
 	index: () => {
 		return axios.get(ENDPOINT);
+	},
+
+	show: (id) => {
+		return axios.get(`${ENDPOINT}/${id}`);
 	}
 
 }
